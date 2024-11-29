@@ -182,17 +182,34 @@ body {
 
 
 /*Pagina IndexProdutos:*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background: url(/img/carrosel1.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#produto {
+    display: flex;
+}
+
 .produtos1 {
     display: flex;
     justify-content: space-evenly;
     margin-top: 4vw;
     align-items: center;
+    border: 1px solid red;
 }
 
 .icone_produto {
     width: 80.5px; /* Aumentado 15% de 70px */
     cursor: pointer;
-    text-align: center;
 }
 
 .fundo_opcao {
@@ -203,6 +220,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    border: 1px solid red;
 }
 
     .fundo_opcao div {
@@ -233,6 +251,8 @@ body {
     margin-top: 4vw;
 }
 
+
+
 .nome_produto {
     margin-top: 0.5vw;
     font-size: 14px;
@@ -243,8 +263,7 @@ body {
     justify-content: space-between;
     margin-top: 1vw;
     align-items: center;
-    border: 1px solid red;
-    height: 48vh;
+    border: 5px solid red;
 }
 
 .titulo_produto {
@@ -257,24 +276,26 @@ body {
 .fundo_solo {
     cursor: pointer;
     text-align: center;
-    width: 224.25px; /* Aumentado 15% de 195px */
-    height: 358.8px; /* Aumentado 15% de 312px */
+    width: 300px; /* Aumentado 15% de 195px */
+    height: 380px; /* Aumentado 15% de 312px */
     background: #FFFFFF;
     box-shadow: 4px 8px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
+    border: 1px solid red;
 }
 
-.fundo_solo div {
-    width: 100%;
-    height: 30px;
-}
 
-.fundo_solo i {
-    font-size: 30px;
-    color: red;
-    margin-left: 70%;
-    margin-top: 5%;
-}
+    .fundo_solo div {
+        width: 100%;
+        height: 30px;
+    }
+
+    .fundo_solo i {
+        font-size: 30px;
+        color: red;
+        margin-left: 70%;
+        margin-top: 5%;
+    }
 
 .fas.fa-heart, .far.fa-heart {
     transition: color 0.3s ease; /* Animação suave para mudança de cor */
@@ -282,29 +303,90 @@ body {
 
 /* Coração com borda (vacío) */
 .far.fa-heart {
-    color: red; /* Coração com borda vermelha */
+    color: #184DAB; /* Coração com borda vermelha */
 }
 
 /* Coração preenchido */
 .fas.fa-heart {
-    color: red; /* Coração preenchido */
+    color: #184DAB; /* Coração preenchido */
 }
 
-.icone_produto_solo{
+.icone_produto_solo {
     width: 164.45px; /* Aumentado 15% de 143px */
     cursor: pointer;
 }
 
 .preco {
-    margin-top: 1vw;
     font-size: 30px;
 }
 
 .desc {
     margin-top: 1vw;
-    font-size: 12px;
+    font-size: 20px;
     text-align: center;
     width: 95%;
+    width: 100%;
+}
+
+.infos {
+    margin-top: 1vw;
+    font-size: 22px;
+    background-color: #184DAB;
+    color: white;
+    height: 5vh;
+    width: 70%;
+    border: none;
+    border-radius: 10px;
+}
+
+#button-prox {
+    width: 9.5%;
+}
+
+#button-ante {
+    width: 10%;
+}
+
+.carousel {
+    margin-top: 4vw;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #184DAB; /* Adiciona um fundo para destacar os ícones */
+    border-radius: 50%; /* Forma circular */
+}
+
+    .carousel-control-prev-icon:after,
+    .carousel-control-next-icon:after {
+        display: none; /* Remove símbolos duplicados se existirem */
+    }
+
+
+@media screen and (max-width: 600px) {
+    #button-prox {
+        width: 15%;
+    }
+
+    #button-ante {
+        width: 10%;
+    }
+
+    .carousel {
+        margin-top: 20vw;
+    }
+
+    .titulo_produto {
+        margin-top: 20vw;
+        font-size: 25px;
+        color: #184DAB;
+        text-align: center;
+    }
+
+    .row {
+        display: flex;
+        gap: 15px;
+    }
 }
 
 

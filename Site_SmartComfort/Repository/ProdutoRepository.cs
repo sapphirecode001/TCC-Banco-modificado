@@ -32,7 +32,7 @@ namespace Site_SmartComfort.Repository
                 cmd.Parameters.Add("@GarantiaPro", MySqlDbType.DateTime).Value = produto.GarantiaPro;
                 cmd.Parameters.Add("@ImgUrlPro", MySqlDbType.VarChar).Value = produto.ImgUrlPro;
                 cmd.Parameters.Add("@Voltagem", MySqlDbType.Int64).Value = produto.Voltagem;
-                cmd.Parameters.Add("@IdCategoria", MySqlDbType.Int64).Value = produto.RefCategoria.IdCategoria;
+                cmd.Parameters.Add("@IdCategoria", MySqlDbType.VarChar).Value = produto.RefCategoria.IdCategoria;
                 cmd.ExecuteNonQuery();
                 conexao.Close();
               
@@ -45,17 +45,17 @@ namespace Site_SmartComfort.Repository
             {
                 conexao.Open();
 
-                MySqlCommand cmd = new MySqlCommand("Insert into tbProdutoAutomacao  (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, ImgUrlPro, Voltagem, IdCategoria) " +
+                MySqlCommand cmd = new MySqlCommand("insert into tbProdutoAutomacao  (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, ImgUrlPro, Voltagem, IdCategoria) " +
                     "values (@CodBar, @NomePro, @PrecoPro, @QtdEstoquePro, @GarantiaPro, @ImgUrlPro, @Voltagem, @IdCategoria)", conexao);
 
-                cmd.Parameters.Add("@Id", MySqlDbType.Int64).Value = produto.Id;
+               // cmd.Parameters.Add("@Id", MySqlDbType.Int64).Value = produto.Id;
                 cmd.Parameters.Add("@CodBar", MySqlDbType.Decimal).Value = produto.CodBar;
                 cmd.Parameters.Add("@nomePro", MySqlDbType.VarChar).Value = produto.NomePro;
                 cmd.Parameters.Add("@PrecoPro", MySqlDbType.Decimal).Value = produto.PrecoPro;
                 cmd.Parameters.Add("@QtdEstoquePro", MySqlDbType.Int64).Value = produto.QtdEstoquePro;
                 cmd.Parameters.Add("@GarantiaPro", MySqlDbType.DateTime).Value = produto.GarantiaPro;
                 cmd.Parameters.Add("@ImgUrlPro", MySqlDbType.VarChar).Value = produto.ImgUrlPro;
-                cmd.Parameters.Add("@Voltagem", MySqlDbType.Int64).Value = produto.Voltagem;
+                cmd.Parameters.Add("@Voltagem", MySqlDbType.VarChar).Value = produto.Voltagem;
                 cmd.Parameters.Add("@IdCategoria", MySqlDbType.Int64).Value = produto.RefCategoria.IdCategoria;
 
                 cmd.ExecuteNonQuery();
@@ -92,8 +92,8 @@ namespace Site_SmartComfort.Repository
                 dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 while (dr.Read()) {
                     produto.Id = Convert.ToInt32(dr["Id"]);
-                    produto.CodBar = Convert.ToDecimal(dr["CodBar"]);
-                            produto.NomePro = (string)(dr["NomeCategoria"]);
+                    produto.CodBar = Convert.ToInt64(dr["CodBar"]);
+                    produto.NomePro = (string)(dr["NomeCategoria"]);
                     produto.PrecoPro = Convert.ToDecimal(dr["PrecoPro"]);
                     produto.QtdEstoquePro = Convert.ToInt32(dr["QtdEstoquePro"]);
                     produto.GarantiaPro = Convert.ToDateTime(dr["GarantiaPro"]);
@@ -129,7 +129,7 @@ namespace Site_SmartComfort.Repository
                         new Produto
                         {
                             Id = Convert.ToInt32(dr["Id"]),
-                            CodBar = Convert.ToDecimal(dr["CodBar"]),
+                            CodBar = Convert.ToInt64(dr["CodBar"]),
                             NomePro = (string)(dr["NomeCategoria"]),
                             PrecoPro = Convert.ToDecimal(dr["PrecoPro"]),
                             QtdEstoquePro = Convert.ToInt32(dr["QtdEstoquePro"]),
@@ -138,10 +138,11 @@ namespace Site_SmartComfort.Repository
                             ImgUrlPro = (string)(dr["ImgUrlPro"]),
                             RefCategoria = new Categoria()
                             {
-                                IdCategoria = Convert.ToInt32(dr["Id"]),
+                                IdCategoria = Convert.ToInt32(dr["IdCategoria"]), 
                                 NomeCategoria = (string)(dr["NomeCategoria"]),
                             }
                         }
+
                         );
                 }
                 return Prolist;

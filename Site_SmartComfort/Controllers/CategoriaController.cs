@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Site_SmartComfort.Models;
+using Site_SmartComfort.Repository;
 using Site_SmartComfort.Repository.Contract;
 
 namespace Site_SmartComfort.Controllers
@@ -7,8 +8,8 @@ namespace Site_SmartComfort.Controllers
     public class CategoriaController : Controller
     {
         private readonly ILogger<CategoriaController> _logger;
-        private ICategoriaRepository _categoriaRepository;
-        public CategoriaController(ILogger<CategoriaController> logger, ICategoriaRepository categoriaRepository)
+        private CategoriaRepository _categoriaRepository;
+        public CategoriaController(ILogger<CategoriaController> logger, CategoriaRepository categoriaRepository)
         {
             _logger = logger;
             _categoriaRepository = categoriaRepository;
@@ -27,5 +28,25 @@ namespace Site_SmartComfort.Controllers
             _categoriaRepository.CadastrarCategoria(categoria);
             return View();
         }
+
+        public IActionResult editarCategoria(int id)
+        {
+            return View(_categoriaRepository.ObterCategoria(id));
+        }
+
+        [HttpPost]
+        public IActionResult editarCategoria(Categoria categoria)
+        {
+            _categoriaRepository.AtualizarCategoria(categoria);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Excluir(int id)
+        {
+            _categoriaRepository.Excluir(id);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
+

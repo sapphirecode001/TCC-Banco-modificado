@@ -1,5 +1,6 @@
 -- base de dados da empresa para o uso no Asp.net
 -- feito por João Lucas
+drop database dbSmartComfort;
 create database dbSmartComfort;
 use dbSmartComfort;
 
@@ -86,45 +87,34 @@ IdIte int PRIMARY KEY auto_increment,
 QtdIte smallint unsigned not null,
 PrecoIte decimal(10,2) not null,
 IdPed int,
-CodBar numeric(13) ,
+Id int,
 FOREIGN KEY(IdPed) REFERENCES tbPedido (IdPed)
 );
 
 CREATE TABLE tbFavoritos (
 IdFav int PRIMARY KEY auto_increment,
-CodBar numeric(13) ,
+Id int,
 IdUsu int,
 FOREIGN KEY(IdUsu) REFERENCES tbUsuario (IdUsu)
 );
 
 CREATE TABLE tbProdutoAutomacao (
-CodBar numeric(13) PRIMARY KEY,
+Id int primary key auto_increment,
+CodBar bigint,
 NomePro varchar(250) not null,
 PrecoPro decimal(10,2) not null,
 QtdEstoquePro int unsigned not null,
 GarantiaPro date not null,
-MarcaPro varchar(200) not null,
-ModeloPro varchar(200) not null,
-PesoPro decimal(10,3) not null,
-AlturaPro decimal(10,2) not null,
-LarguraPro decimal(10,2) not null,
-ComprimentoPro decimal(10,2) not null,
 ImgUrlPro varchar(255) not null,
-IdFunc int,
-IdCategoria int,
-IdVoltagem int
+Voltagem varchar(10) not null,
+IdCategoria int
 );
 
-CREATE TABLE tbVoltagem (
-IdVoltagem int PRIMARY KEY auto_increment,
-NumVoltagem int not null,
-descVol varchar(200)
-);
+select * from tbProdutoAutomacao;
 
 CREATE TABLE tbCategoria (
 IdCategoria int PRIMARY KEY auto_increment,
-NomeCategoria varchar(50) not null,
-descCat varchar(200)
+NomeCategoria varchar(50) not null
 );
 
 CREATE TABLE tbFuncionario (
@@ -142,11 +132,9 @@ ALTER TABLE tbEndereco ADD FOREIGN KEY(IdEst) REFERENCES tbEstado (IdEst);
 ALTER TABLE tbEndereco ADD FOREIGN KEY(IdCid) REFERENCES tbCidade (IdCid);
 ALTER TABLE tbPedido ADD FOREIGN KEY(NumNF) REFERENCES tbNotaFiscal (NumNF);
 ALTER TABLE tbPedido ADD FOREIGN KEY(IdPag) REFERENCES tbPagamento (IdPag);
-ALTER TABLE tbItemPedido ADD FOREIGN KEY(CodBar) REFERENCES tbProdutoAutomacao (CodBar);
-ALTER TABLE tbFavoritos ADD FOREIGN KEY(CodBar) REFERENCES tbProdutoAutomacao (CodBar);
-ALTER TABLE tbProdutoAutomacao ADD FOREIGN KEY(IdFunc) REFERENCES tbFuncionario (IdFunc);
+ALTER TABLE tbItemPedido ADD FOREIGN KEY(Id) REFERENCES tbProdutoAutomacao (Id);
+ALTER TABLE tbFavoritos ADD FOREIGN KEY(Id) REFERENCES tbProdutoAutomacao (Id);
 ALTER TABLE tbProdutoAutomacao ADD FOREIGN KEY(IdCategoria) REFERENCES tbCategoria (IdCategoria);
-ALTER TABLE tbProdutoAutomacao ADD FOREIGN KEY(IdVoltagem) REFERENCES tbVoltagem (IdVoltagem);
 
 -- Inserindo estados
 INSERT INTO tbEstado (UfEstado) VALUES ('SP');
@@ -187,25 +175,18 @@ INSERT INTO tbFuncionario (DataEntradaFunc, EmailFunc, NomeFunc, SenhaFunc, Carg
 VALUES ('2024-01-01', 'func1@empresa.com', 'Carlos Souza', 'senha789', 'Gerente');
 
 -- Inserindo categorias de produtos
-INSERT INTO tbCategoria (NomeCategoria, descCat) 
-VALUES ('Iluminação', 'Produtos de iluminação residencial');
+INSERT INTO tbCategoria (NomeCategoria) 
+VALUES ('Iluminação');
 
-INSERT INTO tbCategoria (NomeCategoria, descCat) 
-VALUES ('Segurança', 'Equipamentos de segurança residencial');
-
--- Inserindo voltagens
-INSERT INTO tbVoltagem (NumVoltagem, descVol) 
-VALUES (110, 'Voltagem padrão 110V');
-
-INSERT INTO tbVoltagem (NumVoltagem, descVol) 
-VALUES (220, 'Voltagem padrão 220V');
+INSERT INTO tbCategoria (NomeCategoria) 
+VALUES ('Segurança');
 
 -- Inserindo produtos de automação
-INSERT INTO tbProdutoAutomacao (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, MarcaPro, ModeloPro, PesoPro, AlturaPro, LarguraPro, ComprimentoPro, ImgUrlPro, IdFunc, IdCategoria, IdVoltagem) 
-VALUES (7891234567891, 'Lâmpada Inteligente', 99.90, 100, '2025-09-10', 'Philips', 'HUE123', 0.300, 10.0, 5.0, 5.0, 'https://imageurl.com/lampada', 1, 1, 1);
+INSERT INTO tbProdutoAutomacao (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, Voltagem, ImgUrlPro, IdCategoria) 
+VALUES (7891234567891, 'Lâmpada Inteligente', 99.90, 100, '2025-09-10', 110, 'https://imageurl.com/lampada', 1);
 
-INSERT INTO tbProdutoAutomacao (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, MarcaPro, ModeloPro, PesoPro, AlturaPro, LarguraPro, ComprimentoPro, ImgUrlPro, IdFunc, IdCategoria, IdVoltagem) 
-VALUES (7899876543210, 'Câmera de Segurança', 299.90, 50, '2026-09-10', 'Intelbras', 'CAM2021', 0.500, 15.0, 8.0, 8.0, 'https://imageurl.com/camera', 1, 2, 2);
+INSERT INTO tbProdutoAutomacao (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, Voltagem, ImgUrlPro, IdCategoria) 
+VALUES (7899876543210, 'Câmera de Segurança', 299.90, 50, '2026-09-10', 110,  'https://imageurl.com/camera', 1);
 
 -- Inserindo pagamentos
 INSERT INTO tbPagamento (StatusPag, MetodoPag) 
@@ -229,18 +210,18 @@ INSERT INTO tbPedido (DataPed, TotalPed, IdUsu, NumNF, IdPag, IdEnd)
 VALUES ('2024-09-12', 299.90, 2, 2, 2, 2);
 
 -- Inserindo itens do pedido
-INSERT INTO tbItemPedido (QtdIte, PrecoIte, IdPed, CodBar) 
-VALUES (1, 99.90, 1, 7891234567891);
+INSERT INTO tbItemPedido (QtdIte, PrecoIte, IdPed, Id) 
+VALUES (1, 99.90, 1, 1);
 
-INSERT INTO tbItemPedido (QtdIte, PrecoIte, IdPed, CodBar) 
-VALUES (2, 299.90, 2, 7899876543210);
+INSERT INTO tbItemPedido (QtdIte, PrecoIte, IdPed, Id) 
+VALUES (2, 299.90, 2, 2);
 
 -- Inserindo favoritos
-INSERT INTO tbFavoritos (CodBar, IdUsu) 
-VALUES (7891234567891, 1);
+INSERT INTO tbFavoritos (Id, IdUsu) 
+VALUES (1, 1);
 
-INSERT INTO tbFavoritos (CodBar, IdUsu) 
-VALUES (7899876543210, 2);
+INSERT INTO tbFavoritos (Id, IdUsu) 
+VALUES (2, 2);
 
 DELIMITER $$
 create PROCEDURE sp_LoginUsuario(

@@ -17,7 +17,18 @@ namespace Site_SmartComfort.Repository
 
         public void AtualizarCategoria(Categoria categoria)
         {
-            throw new NotImplementedException();
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
+            {
+                conexao.Open();
+                MySqlCommand cmd = new MySqlCommand("Update tbCategoria set IdCategoria=@IdCategoria, NomeCategoria=@@NomeCategoria " +
+                                                                    "Where IdCategoria=@IdCategoria ", conexao);
+
+                cmd.Parameters.Add("@IdCategoria", MySqlDbType.Int64).Value = categoria.IdCategoria;
+                cmd.Parameters.Add("@NomeCategoria", MySqlDbType.VarChar).Value = categoria.NomeCategoria;
+
+                cmd.ExecuteNonQuery();
+                conexao.Close();
+            }
         }
 
         public void CadastrarCategoria(Categoria categoria)
@@ -39,13 +50,46 @@ namespace Site_SmartComfort.Repository
 
         public void Excluir(int Id)
         {
-            throw new NotImplementedException();
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
+            {
+                conexao.Open();
+                MySqlCommand cmd = new MySqlCommand("delete from tbCategoria where IdCategoria=@IdCategoria", conexao);
+                cmd.Parameters.AddWithValue("@IdCategoria", Id);
+                int i = cmd.ExecuteNonQuery();
+                conexao.Close();
+
+            }
         }
 
-        public Produto ObterCategoria(int Id)
+        public Categoria ObterCategoria(int Id)
         {
-            throw new NotImplementedException();
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
+            {
+                conexao.Open();
+
+                MySqlCommand cmd = new MySqlCommand("select * from tbCategoria where IdCategoria = @IdCategoria", conexao);
+
+                // Adicionando o parâmetro
+                cmd.Parameters.AddWithValue("@IdCategoria", Id);
+
+                Categoria categoria = null;
+
+                using (var dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        categoria = new Categoria
+                        {
+                            IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
+                            NomeCategoria = dr["NomeCategoria"]?.ToString()
+                        };
+                    }
+                }
+
+                return categoria;
+            }
         }
+
 
         public IEnumerable<Categoria> ObterTodosCategorias()
         {

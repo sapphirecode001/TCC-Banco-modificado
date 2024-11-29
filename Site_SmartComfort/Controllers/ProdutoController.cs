@@ -24,6 +24,11 @@ namespace Site_SmartComfort.Controllers
             return View(_produtoRepository.ObterTodosProdutos());
         }
 
+        public IActionResult Produto()
+        {
+        return View();
+        }
+
         [HttpGet]
         public IActionResult CadProduto()
         {

@@ -3,15 +3,20 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link rel="stylesheet" href="~/css/produtoColab.css">
+<div class="organizar">
 <p>
     <a asp-action="CadProduto">Cadastrar Novo Produto</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @*
+                <th>
                 @Html.DisplayNameFor(model => model.Id)
-            </th>
+                </th>
+            *@
+ 
             <th>
                 @Html.DisplayNameFor(model => model.CodBar)
             </th>
@@ -39,9 +44,13 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @*
+                <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
+                </td>
+
+            *@
+         
             <td>
                 @Html.DisplayFor(modelItem => item.CodBar)
             </td>
@@ -71,3 +80,5 @@
 }
     </tbody>
 </table>
+
+</div>
