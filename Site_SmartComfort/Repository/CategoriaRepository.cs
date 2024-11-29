@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using Site_SmartComfort.Models;
 using Site_SmartComfort.Repository.Contract;
+using System.Data;
 
 namespace Site_SmartComfort.Repository
 {
@@ -48,7 +49,30 @@ namespace Site_SmartComfort.Repository
 
         public IEnumerable<Categoria> ObterTodosCategorias()
         {
-            throw new NotImplementedException();
+            List<Categoria> Catlist = new List<Categoria>();
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
+            {
+                conexao.Open();
+                MySqlCommand cmd = new MySqlCommand("select * from tbCategoria;", conexao);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                conexao.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    Catlist.Add(
+                        new Categoria
+                        {
+                            IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
+                            NomeCategoria = (string)(dr["NomeCategoria"]),
+                        }
+                        );
+                }
+                return Catlist;
+            }
         }
     }
 }

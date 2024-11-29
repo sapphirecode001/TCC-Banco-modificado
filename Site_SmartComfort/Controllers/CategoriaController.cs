@@ -15,7 +15,7 @@ namespace Site_SmartComfort.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return View(_categoriaRepository.ObterTodosCategorias());
         }
         public IActionResult CadCategoria()
         {

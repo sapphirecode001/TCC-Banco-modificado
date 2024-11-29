@@ -12,6 +12,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
 builder.Services.AddScoped<Site_SmartComfort.Libraries.Sessao.Sessao>();
 
 builder.Services.AddScoped<LoginUsuario>();

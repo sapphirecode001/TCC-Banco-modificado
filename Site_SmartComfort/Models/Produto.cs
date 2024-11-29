@@ -3,7 +3,7 @@
     public class Produto
     {
         public int Id { get; set; }
-        public int CodBar { get; set; }
+        public decimal CodBar { get; set; }
         public string NomePro { get; set; }
         public decimal PrecoPro { get; set; }
         public int QtdEstoquePro { get; set; }
