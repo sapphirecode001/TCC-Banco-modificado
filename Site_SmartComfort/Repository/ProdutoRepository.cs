@@ -21,21 +21,24 @@ namespace Site_SmartComfort.Repository
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("Update tbProdutoAutomacao set CodBar=@CodBar, NomePro=@NomePro, PrecoPro=@PrecoPro, QtdEstoquePro=@QtdEstoquePro, GarantiaPro=@GarantiaPro, ImgUrlPro=@ImgUrlPro, Voltagem=@Voltagem, IdCategoria=@RefCategoria.IdCategoria" +
-                    " Where Id=@Id ", conexao);
 
-                cmd.Parameters.Add("@Id", MySqlDbType.Int64).Value = produto.Id;
-                cmd.Parameters.Add("@CodBar", MySqlDbType.Decimal).Value = produto.CodBar;
-                cmd.Parameters.Add("@nomePro", MySqlDbType.VarChar).Value = produto.NomePro;
-                cmd.Parameters.Add("@PrecoPro", MySqlDbType.Decimal).Value = produto.PrecoPro;
-                cmd.Parameters.Add("@QtdEstoquePro", MySqlDbType.Int64).Value = produto.QtdEstoquePro;
-                cmd.Parameters.Add("@GarantiaPro", MySqlDbType.DateTime).Value = produto.GarantiaPro;
-                cmd.Parameters.Add("@ImgUrlPro", MySqlDbType.VarChar).Value = produto.ImgUrlPro;
-                cmd.Parameters.Add("@Voltagem", MySqlDbType.Int64).Value = produto.Voltagem;
-                cmd.Parameters.Add("@IdCategoria", MySqlDbType.VarChar).Value = produto.RefCategoria.IdCategoria;
+                // Ajuste da consulta SQL
+                MySqlCommand cmd = new MySqlCommand(
+                    "UPDATE tbProdutoAutomacao SET NomePro = @NomePro, CodBar = @CodBar, PrecoPro = @PrecoPro, ImgUrlPro = @ImgUrlPro, QtdEstoquePro = @QtdEstoquePro, GarantiaPro = @GarantiaPro, Voltagem = @Voltagem WHERE Id = @Id",
+                    conexao);
+
+                // Parâmetros corretamente adicionados
+                cmd.Parameters.AddWithValue("@Id", produto.Id);
+                cmd.Parameters.AddWithValue("@CodBar", produto.CodBar);
+                cmd.Parameters.AddWithValue("@NomePro", produto.NomePro);
+                cmd.Parameters.AddWithValue("@PrecoPro", produto.PrecoPro);
+                cmd.Parameters.AddWithValue("@ImgUrlPro", produto.ImgUrlPro);
+                cmd.Parameters.AddWithValue("@QtdEstoquePro", produto.QtdEstoquePro);
+                cmd.Parameters.AddWithValue("@GarantiaPro", produto.GarantiaPro);
+                cmd.Parameters.AddWithValue("@Voltagem", produto.Voltagem);
+
+                // Executa o comando
                 cmd.ExecuteNonQuery();
-                conexao.Close();
-              
             }
         }
 
@@ -48,7 +51,7 @@ namespace Site_SmartComfort.Repository
                 MySqlCommand cmd = new MySqlCommand("insert into tbProdutoAutomacao  (CodBar, NomePro, PrecoPro, QtdEstoquePro, GarantiaPro, ImgUrlPro, Voltagem, IdCategoria) " +
                     "values (@CodBar, @NomePro, @PrecoPro, @QtdEstoquePro, @GarantiaPro, @ImgUrlPro, @Voltagem, @IdCategoria)", conexao);
 
-               // cmd.Parameters.Add("@Id", MySqlDbType.Int64).Value = produto.Id;
+                // cmd.Parameters.Add("@Id", MySqlDbType.Int64).Value = produto.Id;
                 cmd.Parameters.Add("@CodBar", MySqlDbType.Decimal).Value = produto.CodBar;
                 cmd.Parameters.Add("@nomePro", MySqlDbType.VarChar).Value = produto.NomePro;
                 cmd.Parameters.Add("@PrecoPro", MySqlDbType.Decimal).Value = produto.PrecoPro;
@@ -70,83 +73,70 @@ namespace Site_SmartComfort.Repository
                 conexao.Open();
                 MySqlCommand cmd = new MySqlCommand("delete from tbProdutoAutomacao where Id=@Id", conexao);
                 cmd.Parameters.AddWithValue("@Id", Id);
-               int i = cmd.ExecuteNonQuery();
+                int i = cmd.ExecuteNonQuery();
                 conexao.Close();
 
             }
         }
 
-        public Produto ObterProduto(int Id)
+        public Produto ObterProduto(int id)
         {
-            List<Produto> Prolist = new List<Produto>();
+            Produto produto = null;
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("select * from tbProdutoAutomacao as t1 inner join tbCategoria as t2 on t1.Id = t2.IdCategoria where Id=@Id", conexao);
-                cmd.Parameters.AddWithValue("@Id", Id);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM tbProdutoAutomacao WHERE Id = @Id", conexao);
+                cmd.Parameters.AddWithValue("@Id", id);
 
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                MySqlDataReader dr;
-
-                Produto produto = new Produto();
-                dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                while (dr.Read()) {
-                    produto.Id = Convert.ToInt32(dr["Id"]);
-                    produto.CodBar = Convert.ToInt64(dr["CodBar"]);
-                    produto.NomePro = (string)(dr["NomeCategoria"]);
-                    produto.PrecoPro = Convert.ToDecimal(dr["PrecoPro"]);
-                    produto.QtdEstoquePro = Convert.ToInt32(dr["QtdEstoquePro"]);
-                    produto.GarantiaPro = Convert.ToDateTime(dr["GarantiaPro"]);
-                    produto.Voltagem = (string)(dr["Voltagem"]);
-                    produto.ImgUrlPro = (string)(dr["ImgUrlPro"]);
-                            produto.RefCategoria = new Categoria()
-                            {
-                                IdCategoria = Convert.ToInt32(dr["Id"]),
-                                NomeCategoria = (string)(dr["NomeCategoria"]),
-                            };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        produto = new Produto
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            CodBar = Convert.ToInt64(reader["CodBar"]),
+                            NomePro = reader["NomePro"].ToString(),
+                            PrecoPro = Convert.ToDecimal(reader["PrecoPro"]),
+                            ImgUrlPro = reader["ImgUrlPro"].ToString(),
+                            QtdEstoquePro = Convert.ToInt32(reader["QtdEstoquePro"]),
+                            GarantiaPro = Convert.ToDateTime(reader["GarantiaPro"]),
+                            Voltagem = reader["Voltagem"].ToString(),
+                        };
+                    }
                 }
-                return produto;
             }
+            return produto;
         }
 
         public IEnumerable<Produto> ObterTodosProdutos()
         {
-            List<Produto> Prolist = new List<Produto>();
+            List<Produto> produtos = new List<Produto>();
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("select * from tbProdutoAutomacao as t1 inner join tbCategoria as t2 on t1.Id = t2.IdCategoria;", conexao);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM tbProdutoAutomacao", conexao);
 
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                conexao.Close();
-                foreach (DataRow dr in dt.Rows)
+                using (var reader = cmd.ExecuteReader())
                 {
-                    Prolist.Add(
-                        new Produto
+                    while (reader.Read())
+                    {
+                        produtos.Add(new Produto
                         {
-                            Id = Convert.ToInt32(dr["Id"]),
-                            CodBar = Convert.ToInt64(dr["CodBar"]),
-                            NomePro = (string)(dr["NomeCategoria"]),
-                            PrecoPro = Convert.ToDecimal(dr["PrecoPro"]),
-                            QtdEstoquePro = Convert.ToInt32(dr["QtdEstoquePro"]),
-                            GarantiaPro = Convert.ToDateTime(dr["GarantiaPro"]),
-                            Voltagem = (string)(dr["Voltagem"]),
-                            ImgUrlPro = (string)(dr["ImgUrlPro"]),
-                            RefCategoria = new Categoria()
-                            {
-                                IdCategoria = Convert.ToInt32(dr["IdCategoria"]), 
-                                NomeCategoria = (string)(dr["NomeCategoria"]),
-                            }
-                        }
+                            Id = Convert.ToInt32(reader["Id"]), // Certifique-se de que o Id está sendo lido
+                            CodBar = Convert.ToInt64(reader["CodBar"]), // Adicionando o CodBar
+                            NomePro = reader["NomePro"].ToString(),
+                            PrecoPro = Convert.ToDecimal(reader["PrecoPro"]),
+                            ImgUrlPro = reader["ImgUrlPro"].ToString(),
+                            QtdEstoquePro = Convert.ToInt32(reader["QtdEstoquePro"]),
+                            GarantiaPro = Convert.ToDateTime(reader["GarantiaPro"]),
+                            Voltagem = reader["Voltagem"].ToString()
 
-                        );
+                        });
+                    }
                 }
-                return Prolist;
             }
-    }
+            return produtos;
+        }
     }
 }

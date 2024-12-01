@@ -1,4 +1,4 @@
-﻿@model IEnumerable
+﻿@model IEnumerable<Site_SmartComfort.Models.Produto>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -75,100 +75,44 @@
 
     </div>
         <h1 class="titulo_produto" id="cameras">CAMERAS</h1>
-        <div id="destaqueCarouse" class="carousel slide">
+        <div id="destaqueCarouse" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <!-- Slide 1 -->
-                <div class="carousel-item active">
-                    <div class="row">
-                        <div class="col-lg-4 d-flex flex-column align-items-center" id="produto">
-                            <div class="fundo_solo">
-                                <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
-                                <img class="icone_produto_solo" src="~/img/produtos/camera.png">
-                                <h3 class="desc">Câmera Speed Dome</h3>
-                                <h1 class="preco">R$115,59</h1>
-                                <button class="infos" id="abrirModalBtn" style="">
-                                    Mais informações
-                                </button>
-                            </div>
-                        </div>
+                @for (int i = 0; i < Model.Count(); i += 3)
+                {
+                    var produtosParaSlide = Model.Skip(i).Take(3);  // Pega 3 produtos por vez
 
-                        <div class="col-lg-4 d-flex flex-column align-items-center">
-                            <div class="fundo_solo">
-                                <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
-                                <img class="icone_produto_solo" src="~/img/produtos/camera.png">
-                                <h3 class="desc">Câmera Speed Dome</h3>
-                                <h1 class="preco">R$115,59</h1>
-                                <button class="infos" id="abrirModalBtn" style="">
-                                    Mais informações
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 d-flex flex-column align-items-center">
-                            <div class="fundo_solo">
-                                <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
-                                <img class="icone_produto_solo" src="~/img/produtos/camera.png">
-                                <h3 class="desc">Câmera Speed Dome</h3>
-                                <h1 class="preco">R$115,59</h1>
-                                <button class="infos" id="abrirModalBtn" style="">
-                                    Mais informações
-                                </button>
-                            </div>
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row">
+                            @foreach (var produto in produtosParaSlide)
+                            {
+                                <div class="col-lg-4 d-flex flex-column align-items-center">
+                                    <div class="fundo_solo">
+                                        <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
+                                        <!-- Exibindo imagem do produto -->
+                                        <img class="icone_produto_solo" src="@produto.ImgUrlPro" alt="@produto.NomePro">
+                                        <h3 class="desc">@produto.NomePro</h3>
+                                        <h1 class="preco">R$ @produto.PrecoPro</h1>
+                                        <button class="infos" id="abrirModalBtn">
+                                            Mais informações
+                                        </button>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
-                </div>
-                <!-- Slide 2 -->
-                <div class="carousel-item">
-                    <div class="row">
-                        <div class="col-lg-4 d-flex flex-column align-items-center">
-                            <div class="fundo_solo">
-                                <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
-                                <img class="icone_produto_solo" src="~/img/produtos/camera.png">
-                                <h3 class="desc">Câmera Speed Dome</h3>
-                                <h1 class="preco">R$115,59</h1>
-                                <button class="infos" id="abrirModalBtn" style="">
-                                    Mais informações
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 d-flex flex-column align-items-center">
-                            <div class="fundo_solo">
-                                <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
-                                <img class="icone_produto_solo" src="~/img/produtos/camera.png">
-                                <h3 class="desc">Câmera Speed Dome</h3>
-                                <h1 class="preco">R$115,59</h1>
-                                <button class="infos" id="abrirModalBtn" style="">
-                                    Mais informações
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 d-flex flex-column align-items-center">
-                            <div class="fundo_solo">
-                                <div><i class="far fa-heart border-heart" onclick="toggleHeart(this)"></i></div>
-                                <img class="icone_produto_solo" src="~/img/produtos/camera.png">
-                                <h3 class="desc">Câmera Speed Dome</h3>
-                                <h1 class="preco">R$115,59</h1>
-                                <button class="infos" style="">
-                                    Mais informações
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
+
             <!-- Controles -->
-            <a id="button-ante" class="carousel-control-prev" href="#destaqueCarouse" role="button" data-bs-slide="prev">
+            <a class="carousel-control-prev" href="#destaqueCarouse" role="button" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Anterior</span>
             </a>
-            <a id="button-prox" class="carousel-control-next" href="#destaqueCarouse" role="button" data-bs-slide="next">
+            <a class="carousel-control-next" href="#destaqueCarouse" role="button" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Próximo</span>
             </a>
         </div>
-
         <h1 class="titulo_produto" id="roteadores">ROTEADORES</h1>
 
         <div id="destaqueCarousel" class="carousel slide">

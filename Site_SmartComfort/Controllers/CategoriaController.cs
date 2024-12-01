@@ -8,8 +8,9 @@ namespace Site_SmartComfort.Controllers
     public class CategoriaController : Controller
     {
         private readonly ILogger<CategoriaController> _logger;
-        private CategoriaRepository _categoriaRepository;
-        public CategoriaController(ILogger<CategoriaController> logger, CategoriaRepository categoriaRepository)
+        private readonly ICategoriaRepository _categoriaRepository;
+
+        public CategoriaController(ILogger<CategoriaController> logger, ICategoriaRepository categoriaRepository)
         {
             _logger = logger;
             _categoriaRepository = categoriaRepository;
@@ -23,12 +24,11 @@ namespace Site_SmartComfort.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CadCategoria(Categoria categoria) 
+        public IActionResult CadCategoria(Categoria categoria)
         {
             _categoriaRepository.CadastrarCategoria(categoria);
-            return View();
+            return RedirectToAction(nameof(Index)); // Redireciona para a ação Index
         }
-
         public IActionResult editarCategoria(int id)
         {
             return View(_categoriaRepository.ObterCategoria(id));

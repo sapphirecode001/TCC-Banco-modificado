@@ -5,12 +5,9 @@ namespace Site_SmartComfort.Repository.Contract
     public interface ICategoriaRepository
     {
         IEnumerable<Categoria> ObterTodosCategorias();
-        Produto ObterCategoria(int Id);
-
+        Categoria ObterCategoria(int Id); // Aqui corrige para Categoria, não Produto
         void AtualizarCategoria(Categoria categoria);
-
         void CadastrarCategoria(Categoria categoria);
         void Excluir(int Id);
-
     }
 }

@@ -20,7 +20,7 @@ namespace Site_SmartComfort.Repository
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("Update tbCategoria set IdCategoria=@IdCategoria, NomeCategoria=@@NomeCategoria " +
+                MySqlCommand cmd = new MySqlCommand("Update tbCategoria set IdCategoria=@IdCategoria, NomeCategoria=@NomeCategoria " +
                                                                     "Where IdCategoria=@IdCategoria ", conexao);
 
                 cmd.Parameters.Add("@IdCategoria", MySqlDbType.Int64).Value = categoria.IdCategoria;

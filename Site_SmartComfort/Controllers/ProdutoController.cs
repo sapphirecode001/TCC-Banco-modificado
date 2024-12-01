@@ -24,11 +24,6 @@ namespace Site_SmartComfort.Controllers
             return View(_produtoRepository.ObterTodosProdutos());
         }
 
-        public IActionResult Produto()
-        {
-        return View();
-        }
-
         [HttpGet]
         public IActionResult CadProduto()
         {
@@ -40,16 +35,24 @@ namespace Site_SmartComfort.Controllers
         [HttpPost]
         public IActionResult CadProduto(Produto produto)
         {
-            var listaCategoria = _categoriaRepository.ObterTodosCategorias();
-            ViewBag.ListaCategorias = new SelectList(listaCategoria, "id", "NomeCategoria");
             _produtoRepository.CadastrarProduto(produto);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)); // Redireciona para a listagem de produtos
         }
 
-        public IActionResult editarProduto(int id)
-        { 
-            return View(_produtoRepository.ObterProduto(id));
+        public IActionResult EditarProduto(int id)
+        {
+            // Obtém o produto pelo Id
+            var produto = _produtoRepository.ObterProduto(id);
+
+            if (produto == null)
+            {
+                // Se o produto não for encontrado, redireciona ou exibe uma mensagem de erro
+                return NotFound();
+            }
+
+            return View(produto); // Passa o produto para a view
         }
+
 
         [HttpPost]
         public IActionResult editarProduto(Produto produto)
