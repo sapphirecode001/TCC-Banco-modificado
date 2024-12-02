@@ -59,7 +59,7 @@ Cidade varchar(100) not null
 
 CREATE TABLE tbPedido (
 IdPed int PRIMARY KEY auto_increment,
-DataPed date not null,
+DataPed datetime not null default current_timestamp(),
 TotalPed decimal(10,2) not null,
 IdUsu int,
 NumNF int,
@@ -110,8 +110,6 @@ Voltagem varchar(10) not null,
 IdCategoria int
 );
 
-select * from tbProdutoAutomacao;
-
 CREATE TABLE tbCategoria (
 IdCategoria int PRIMARY KEY auto_increment,
 NomeCategoria varchar(50) not null
@@ -119,12 +117,13 @@ NomeCategoria varchar(50) not null
 
 CREATE TABLE tbFuncionario (
 IdFunc int PRIMARY KEY auto_increment,
-DataEntradaFunc date not null,
+DataEntradaFunc datetime not null default current_timestamp,
 EmailFunc varchar(250) not null unique,
 NomeFunc varchar(200) not null,
-SenhaFunc varchar(50) not null,
-CargoFunc varchar(50) not null
+SenhaFunc varchar(50) not null
 );
+
+
 ALTER TABLE tbPJ ADD FOREIGN KEY(IdUsu) REFERENCES tbUsuario (IdUsu);
 ALTER TABLE tbPF ADD FOREIGN KEY(IdUsu) REFERENCES tbUsuario (IdUsu);
 ALTER TABLE tbEndereco ADD FOREIGN KEY(IdBai) REFERENCES tbBairro (IdBai);
@@ -171,8 +170,8 @@ INSERT INTO tbPF (Cpf, NomeCompleto, IdUsu)
 VALUES (12345678901, 'Maria Oliveira', 2);
 
 -- Inserindo funcionários
-INSERT INTO tbFuncionario (DataEntradaFunc, EmailFunc, NomeFunc, SenhaFunc, CargoFunc) 
-VALUES ('2024-01-01', 'func1@empresa.com', 'Carlos Souza', 'senha789', 'Gerente');
+INSERT INTO tbFuncionario (EmailFunc, NomeFunc, SenhaFunc) 
+VALUES ('func1@empresa.com', 'Carlos Souza', 'senha789');
 
 -- Inserindo categorias de produtos
 INSERT INTO tbCategoria (NomeCategoria) 
@@ -322,7 +321,7 @@ _NovoNomeCompleto varchar(200),
 _NovoCpf numeric(11),
 
 -- tbPJ
-_NovoRazaoSocial numeric(250),
+_NovoRazaoSocial varchar(250),
 _NovoCnpj numeric(14),
 _NovoNomeResponsavel varchar(200),
 
