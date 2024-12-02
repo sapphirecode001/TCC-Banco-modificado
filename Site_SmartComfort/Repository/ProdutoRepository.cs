@@ -127,6 +127,7 @@ namespace Site_SmartComfort.Repository
                             CodBar = Convert.ToInt64(reader["CodBar"]), // Adicionando o CodBar
                             NomePro = reader["NomePro"].ToString(),
                             PrecoPro = Convert.ToDecimal(reader["PrecoPro"]),
+
                             ImgUrlPro = reader["ImgUrlPro"].ToString(),
                             QtdEstoquePro = Convert.ToInt32(reader["QtdEstoquePro"]),
                             GarantiaPro = Convert.ToDateTime(reader["GarantiaPro"]),

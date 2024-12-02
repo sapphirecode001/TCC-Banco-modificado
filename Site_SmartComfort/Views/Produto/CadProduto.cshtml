@@ -1,5 +1,5 @@
 ﻿@model Site_SmartComfort.Models.Produto
-
+<link rel="stylesheet" href="~/css/cadproduto.css">
 @{
     ViewData["Title"] = "CadProduto";
 }
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CadProduto">
+        <form asp-action="CadProduto" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CodBar" class="control-label"></label>
@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="GarantiaPro" class="control-label"></label>
-                <input asp-for="GarantiaPro" class="form-control" />
+                <input type="date" asp-for="GarantiaPro" class="form-control" />
                 <span asp-validation-for="GarantiaPro" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,25 +44,27 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImgUrlPro" class="control-label"></label>
-                <input asp-for="ImgUrlPro" class="form-control" />
+                <input type="file" name="file" asp-for="ImgUrlPro" class="form-control" />
                 <span asp-validation-for="ImgUrlPro" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.RefCategoria.IdCategoria, ViewBag.ListaCategorias as SelectList, "Categoria",
+                             htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            @*Add  dorpdown *@
+            @* <div class="form-group">
                 <label asp-for="RefCategoria.IdCategoria" class="control-label"></label>
                 <input asp-for="RefCategoria.IdCategoria" class="form-control" />
                 <span asp-validation-for="RefCategoria.IdCategoria" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Cadastrar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
